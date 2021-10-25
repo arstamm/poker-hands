@@ -50,9 +50,159 @@ let handArrays = [
 ];
 
 function pokerHandRanking(hand) {
-    // write code here
+    /* Given a poker hand in the form of an array with strings,
+        this function returns the hand's ranking.
+    hand (array) --> handRanking (string)
+    */
 
-    return 'Hand ranking goes here';
+    function isMatchingArr(arr1, arr2) {
+        /* Campares two arrays to see if they are matching.
+            Order within either of the arrays is irrelivant.
+        arr1 (array), arr2 (array) --> (boolean)
+        */
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+        arr1.sort();
+        arr2.sort();
+        for (let i = 0; i < arr1.length; i++) {
+            if (arr1[i] !== arr2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function handToCardValues(hand) {
+        /* Extracts card values from hand and places them in an array.
+        hand (array) --> cardValues (array)
+        */
+        const royalToNumObj = {
+            A: 14, K: 13, Q: 12, J: 11
+        };
+        const cardValues = []
+        for (let card of hand) {
+            let cardValue = card.slice(0, -1);
+            if (Object.keys(royalToNumObj).includes(cardValue.toUpperCase())) {
+                cardValue = royalToNumObj[cardValue.toUpperCase()];
+            }
+            cardValues.push(parseInt(cardValue));
+        }
+        return cardValues;
+    }
+
+    function isValid(hand) {
+        /* This function checks to see if a hand is valid
+        hand (array) --> (boolean)
+        */
+        const suitsArr = ['s', 'h', 'd', 'c'];
+        const valuesArr = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
+        const previousCards = []
+        //Check for hand length
+        if (hand.length !== 5) {
+            return false;
+        }
+        for (let i = 0; i < hand.length; i++) {
+            //Check for valid cards
+            if (!suitsArr.includes(hand[i].slice(-1).toLowerCase()) || !valuesArr.includes(hand[i].slice(0, -1).toUpperCase())) {
+                return false;
+            }
+            //Check for duplicates
+            if (previousCards.includes(hand[i].toLowerCase())) {
+                return false;
+            } else {
+                previousCards.push(hand[i].toLowerCase())
+            }   
+        }
+        return true;
+    }
+
+    function isFlush(hand) {
+        /* Checks hand to see if hand is flush
+        hand (array) --> (boolean) 
+        */
+        for (i = 0; i < hand.length - 1; i++) {
+            if (hand[i].slice(-1).toLowerCase() !== hand[i + 1].slice(-1).toLowerCase()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function isStraight(cardValues) {
+        /* Checks hand to see if hand contains a straight
+        cardValues (array) --> (boolean)
+        */
+        const specialCaseValues = [14, 2, 3, 4, 5];
+        if(isMatchingArr(cardValues, specialCaseValues)) {
+            return true;
+        }
+        cardValues.sort((a, b) => a - b);
+        for (let i = 0; i < cardValues.length - 1; i++) {
+            if (cardValues[i] !== cardValues[i + 1] - 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function numOfKind(cardValues) {
+        /* Given a set of card values, this function returns an array
+            that tells us how many of each card is in a hand.
+            For example, if a hand contains 2 aces, 2 nines, and 1 seven,
+            this function will return [2, 2, 1]
+        cardValues (array) --> numOfKind (array)
+        */
+        const valuesObj = {};
+        for (let value of cardValues) {
+            if (Object.keys(valuesObj).includes(`${value}`)) {
+                valuesObj[`${value}`] += 1;
+            } else {
+                valuesObj[`${value}`] = 1;
+            }
+        }
+        const numOfKind = [];
+        for (let key of Object.keys(valuesObj)) {
+            numOfKind.push(valuesObj[key]);
+        }
+        return numOfKind;
+    }
+
+    //Variables
+    const cardValues = handToCardValues(hand);
+
+    //Program
+    if (isValid(hand)) {
+        if (isFlush(hand)) {
+            if (isStraight(cardValues)) {
+                if (isMatchingArr(cardValues, [14, 13, 12, 11, 10])) {
+                    return 'Royal FLush';
+                }
+                return 'Straight Flush';
+            }
+            return 'Flush';
+        } 
+        if (isStraight(cardValues)) {
+            return 'Straight';
+        }
+        if (isMatchingArr(numOfKind(cardValues), [4, 1])){
+            return 'Four of a Kind';
+        }
+        if (isMatchingArr(numOfKind(cardValues), [3, 2])){
+            return 'Full House';
+        }
+        if (isMatchingArr(numOfKind(cardValues), [3, 1, 1])){
+            return 'Three of a Kind';
+        }
+        if (isMatchingArr(numOfKind(cardValues), [2, 2, 1])){
+            return 'Two Pair';
+        }
+        if (isMatchingArr(numOfKind(cardValues), [2, 1, 1, 1])){
+            return 'Pair';
+        }
+        return 'High Card';
+    }
+    return 'Invalid Hand';     
 }
 
 let result = '';
