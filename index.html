@@ -1,0 +1,60 @@
+<!-- Still working on -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Hands</title>
+    <style>
+        body {
+            background-color: #0a5e2a;
+            color: white;
+        } 
+        h1 {
+            text-transform: uppercase;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fe0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Poker Hands</h1>
+    <form id="hand-form-old" action="/q">
+        <div class="card">
+            <select id="card-value-1" class="card-value" name="card-value-1">
+                <option value="Ace">Ace</option>
+                <option value="King">King</option>
+                <option value="Queen">Queen</option>
+                <option value="Jack">Jack</option>
+                <option value="10">10</option>
+                <option value="9">9</option>
+                <option value="8">8</option>
+                <option value="7">7</option>
+                <option value="6">6</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+            </select>
+            <span> of </span>
+            <select id="card-suit-1" class="card-suit" name="card-suit-1">
+                <option value="spade">Spades</option>
+                <option value="heart">Heart</option>
+                <option value="diamond">Diamonds</option>
+                <option value="club">Clubs</option>
+            </select>
+        </div>
+        <div class="form-button">
+            <button>Submit</button>
+        </div>
+        <p>qq</p>
+        <form id="hand-form" action="/q">
+            <p>llama</p>
+        </form>
+    </form>
+
+    <script src="pokerHands.js"></script>
+</body>
+</html>
